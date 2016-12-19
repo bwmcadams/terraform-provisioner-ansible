@@ -17,6 +17,7 @@ import (
 type Provisioner struct {
 	useSudo            bool
 	ansibleLocalScript string
+  InitialCommands    []string          `mapstructure:initial_commands` // commands to run before ansible starts
 	Playbook           string            `mapstructure:"playbook"`
 	Plays              []string          `mapstructure:"plays"`
 	Hosts              []string          `mapstructure:"hosts"`
@@ -37,15 +38,7 @@ func (p *Provisioner) Run(o terraform.UIOutput, comm communicator.Communicator) 
 	// commands that are needed to setup a basic environment to run the `ansible-local.py` script
 	// TODO pivot based upon different platforms and allow optional python provision steps
 	// TODO this should be configurable for folks who want to customize this
-	provisionAnsibleCommands := []string{
-		// https://github.com/hashicorp/terraform/issues/1025
-		// cloud-init runs on fresh sources and can interfere with apt-get update commands causing intermittent failures
-		"/bin/bash -c 'until [[ -f /var/lib/cloud/instance/boot-finished ]]; do sleep 1; done'",
-		"apt-get update",
-		"apt-get install -y build-essential python-dev",
-		"curl https://bootstrap.pypa.io/get-pip.py | sudo python",
-		"pip install ansible",
-	}
+	provisionAnsibleCommands := p.InitialCommands
 
 	for _, command := range provisionAnsibleCommands {
 		o.Output(fmt.Sprintf("running command: %s", command))

@@ -16,7 +16,7 @@ This provisioner provides the ability to apply **host-groups**, **plays** or **r
 To install, download and un-archive the binary and place it on your path.
 
 ```bash
-$ https://github.com/jonmorehouse/terraform-provisioner-ansible/releases/download/0.0.1-terraform-provisioner-ansible.tar.gz
+$ https://github.com/bwmcadams/terraform-provisioner-ansible/releases/download/0.0.1-terraform-provisioner-ansible.tar.gz
 
 $ tar -xvf 0.0.1-terraform-provisioner-ansible.tar.gz /usr/local/bin
 ```
